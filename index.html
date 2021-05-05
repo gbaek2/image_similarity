@@ -96,7 +96,7 @@
         // More API functions here:
         // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
         // the link to your model provided by Teachable Machine export panel
-        const URL = "https://teachablemachine.withgoogle.com/models/1VxT7lcK0/";
+        const URL = "https://teachablemachine.withgoogle.com/models/AwqxCe-hC/";
         let model, webcam, labelContainer, maxPredictions;
         // Load the image model and setup the webcam
         async function init() {
@@ -118,11 +118,36 @@
             // predict can take in an image, video or canvas html element
             var image = document.getElementById("face-image")
             const prediction = await model.predict(image, false);
-            for (let i = 0; i < maxPredictions; i++) {
-                const classPrediction =
-                    prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-                labelContainer.childNodes[i].innerHTML = classPrediction;
+			
+			to_display = prediction[0].className
+			temp_score = prediction[0].probability
+			
+			for (let i = 1; i < maxPredictions; i++) {
+				if (temp_score < prediction[i].probability) {
+					temp_score = prediction[i].probability
+					to_display = prediction[i].className
+				}
             }
+			
+			if (to_display.includes('doorway')) {
+				to_display = 'https://foundation.app/rebeccabathory/doorway-to-a-new-realm-32494'
+			}
+			
+			if (to_display.includes('eth-')) {
+				to_display = 'https://foundation.app/bosslogic/eth-with-the-stars-25270'
+			}
+			
+			if (to_display.includes('knowledge')) {
+				to_display = 'https://foundation.app/adhemas/knowledge-17370'
+			}
+			
+			labelContainer.childNodes[0].innerHTML = "<a href='"+to_display+"'>go to foundation page for purchase</a>"
+			
+            // for (let i = 0; i < maxPredictions; i++) {
+            //     const classPrediction =
+            //         prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            //     labelContainer.childNodes[i].innerHTML = classPrediction;
+            // }
         }
     </script>
 
